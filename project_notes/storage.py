@@ -1,24 +1,26 @@
-
-
 import json
-
-FILE_NAME = "data.json"
-
-
-def save_data(data):
-    with open(FILE_NAME, 'w', encoding='utf-8') as f :
-        json.dump(data, f  , ensure_ascii=False, indent=2)
+import os
+from typing import Any 
 
 
-def load_data():
-    try:
-        with open(FILE_NAME, 'r', encoding='utf-8') as file:
-            return json.load(file)
-    except FileNotFoundError:
+
+
+class JSONStorage:
+    def __int__(self,file_path: str):
+        self.file_path = file_path
+        self.temp_file = f'{file_path}. tmp '
+
+    def load(self) -> dict[str , Any]:
+        if not os.path.exists(self.file_path):
+            return {}
+        try:
+            with open(self.file_path, 'r' , encoding='utf-8') as file:
+                return json.load(file)
+        except json. JSONDecodeError:
+            return {}
         
-        print("ОШИБОЧКА БРАЧУ ")
-        return {}
-    except json.JSONDecodeError:
-        
-        print("Хуйня какайто у нас братан ")
-        return {}
+        def save(self,data: dict[str , Any]) -> None:
+            with open(self.temp_file, 'w' , encoding='utf-8') as file:
+                json.dump(data, file, ensure_ascii=False , indent=2)
+
+            os.replace(self.temp_file, self.file_path)
